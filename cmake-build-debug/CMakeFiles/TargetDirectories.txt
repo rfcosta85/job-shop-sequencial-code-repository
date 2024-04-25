@@ -1,0 +1,3 @@
+/home/rodrigocosta/CLionProjects/sequencialCode/cmake-build-debug/CMakeFiles/sequencialCode.dir
+/home/rodrigocosta/CLionProjects/sequencialCode/cmake-build-debug/CMakeFiles/edit_cache.dir
+/home/rodrigocosta/CLionProjects/sequencialCode/cmake-build-debug/CMakeFiles/rebuild_cache.dir
