@@ -44,7 +44,7 @@ int main(int argc, char **argv)
 
     inputFile = fopen(argv[1], "r");
     outputFile = fopen("output.txt", "w");
-    fscanf(inputFile, "%d%d", &nrJobs, &nrMachines);
+    fscanf(inputFile, "%d %d", &nrJobs, &nrMachines);
     nrOfOperations = nrJobs * nrMachines;
 
     Solution solution[nrJobs][nrMachines];
@@ -55,32 +55,35 @@ int main(int argc, char **argv)
     printf("Operations: %d\n", nrOfOperations);
 
     // Start machines
-    for (int m = 0; m < nrMachines; m++)
+    for (int machineIndex = 0; machineIndex < nrMachines; machineIndex++)
     {
-        machines[m].isFree = true;
-        machines[m].machineNumber = m;
+        machines[machineIndex].isFree = true;
+        machines[machineIndex].machineNumber = machineIndex;
     }
 
     // Read input file
-    for (int i = 0; i < nrJobs; i++)
+    for (int jobIndex = 0; jobIndex < nrJobs; jobIndex++)
     {
-        jobs[i].jobsNumber = i;
+        jobs[jobIndex].jobsNumber = jobIndex;
 
-        for (int j = 0; j < nrMachines; j++)
+        for (int operationIndex = 0; operationIndex < nrMachines; operationIndex++)
         {
-            fscanf(inputFile, "%d%d", &jobs[i].operations[j].machine, &jobs[i].operations[j].time);
-            jobs[i].operations[j].job = i;
+            fscanf(inputFile, "%d %d",
+                   &jobs[jobIndex].operations[operationIndex].machine, &jobs[jobIndex].operations[operationIndex].time);
+            jobs[jobIndex].operations[operationIndex].job = jobIndex;
         }
     }
 
     // Display input data
-    for (int k = 0; k < nrJobs; k++)
+    for (int jobIndex = 0; jobIndex < nrJobs; jobIndex++)
     {
-        printf("\n\nJob: %d   | Operations: \n", jobs[k].jobsNumber);
+        printf("\n\nJob: %d   | Operations: \n", jobs[jobIndex].jobsNumber);
 
-        for (int kk = 0; kk < nrMachines; kk++)
+        for (int operationIndex = 0; operationIndex < nrMachines; operationIndex++)
         {
-            printf("J%d M%d T%d | ", jobs[k].operations[kk].job, jobs[k].operations[kk].machine, jobs[k].operations[kk].time);
+            printf("J%d M%d T%d | ",
+                   jobs[jobIndex].operations[operationIndex].job, jobs[jobIndex].operations[operationIndex].machine,
+                   jobs[jobIndex].operations[operationIndex].time);
         }
     }
 
@@ -102,7 +105,7 @@ int main(int argc, char **argv)
 
                 // put machine busy
                 machines[jobs[row].operations[col].machine].isFree = false;
-                // Aux -> Para saber quando a operação na máquina em questão vai terminar
+                // to know when the operation in machine will end
                 machines[jobs[row].operations[col].machine].endTime = solution[row][col].endTime;
             }
             else
@@ -134,13 +137,14 @@ int main(int argc, char **argv)
     // Print Results
     printf("\n\n*********************");
     printf("\n\nSolution:\n");
-    for (int sr = 0; sr < nrJobs; sr++)
+    for (int jobIndex = 0; jobIndex < nrJobs; jobIndex++)
     {
-        printf("Job %d | ", sr);
-        for (int sc = 0; sc < nrMachines; sc++)
+        printf("Job %d | ", jobIndex);
+        for (int machineIndex = 0; machineIndex < nrMachines; machineIndex++)
         {
-            printf("i: %d  e: %d |", solution[sr][sc].initialTime, solution[sr][sc].endTime);
-            fprintf(outputFile, "%d  ", solution[sr][sc].initialTime);
+            printf("startTime: %d  endTime: %d |", solution[jobIndex][machineIndex].initialTime,
+                   solution[jobIndex][machineIndex].endTime);
+            fprintf(outputFile, "%d  ", solution[jobIndex][machineIndex].initialTime);
         }
         printf("\n");
         fprintf(outputFile, "\n");
